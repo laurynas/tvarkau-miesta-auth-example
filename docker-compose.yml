@@ -1,0 +1,14 @@
+version: '2'
+services:
+  php:
+    image: php:7.2-apache
+    volumes:
+      - ./:/var/www/html
+
+  ssl-proxy:
+    image: fsouza/docker-ssl-proxy
+    environment:
+      TARGET_PORT: 80
+      TARGET_HOST: php
+    ports:
+      - "4443:443"
