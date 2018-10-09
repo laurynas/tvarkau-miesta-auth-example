@@ -14,9 +14,21 @@ $oauthProvider = new \League\OAuth2\Client\Provider\GenericProvider([
 
 session_start();
 
+// get access token if does not exist in session yet
 if (empty($_SESSION['access_token']))
     $_SESSION['access_token'] = $oauthProvider->getAccessToken('client_credentials');
 
+// read existing token from session
 $accessToken = $_SESSION['access_token'];
+
+// check if token has expired and refresh if needed
+if ($accessToken->hasExpired()) {
+    $refreshToken = $accessToken->getRefreshToken();
+    $accessToken = $oauthProvider->getAccessToken('refresh_token', [
+        'refresh_token' => $refreshToken
+    ]);
+
+    $_SESSION['access_token'] = $accessToken;
+}
 
 $api = new API($oauthProvider, $accessToken);
