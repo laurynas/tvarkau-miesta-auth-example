@@ -2,7 +2,9 @@
 
 Start using docker-compose
 
-> docker-compose up
+```
+docker-compose up
+```
 
 Open browser:
 https://localhost:4443
