@@ -3,12 +3,15 @@
 <body>
 
     User:
-    <? if ($accessToken->getValues()['scope'] == 'user'): ?>
-        <?= $api->getCurrentUser()->id ?>
-        / <a href="logout.php">Logout</a>
-    <? else: ?>
+
+    <? $user = $api->getCurrentUser(); ?>
+
+    <? if ($user->guest): ?>
         Anonymous
         / <a href="login.php">Login</a>
+    <? else: ?>
+        <?= $user->email ?: $user->name ?>
+        / <a href="logout.php">Logout</a>
     <? endif ?>
 
 </body>
