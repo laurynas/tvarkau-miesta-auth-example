@@ -15,10 +15,18 @@ class API
         return $this->request('GET', 'me')->user;
     }
 
-    protected function request($method, $path, $params = array())
+    public function revokeToken()
+    {
+        $params = ['token' => $this->token->getToken()];
+        $options = ['body' => http_build_query($params)];
+
+        return $this->request('POST', 'oauth/revoke', $options);
+    }
+
+    protected function request($method, $path, $options = array())
     {
         $uri = $this->uri($path);
-        $request = $this->provider->getAuthenticatedRequest($method, $uri, $this->token);
+        $request = $this->provider->getAuthenticatedRequest($method, $uri, $this->token, $options);
         $response = $this->provider->getResponse($request);
 
         return json_decode($response->getBody());
